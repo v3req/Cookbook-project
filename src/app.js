@@ -1,9 +1,29 @@
 start()
+document.getElementById('logoutBtn').addEventListener('click', onLogOut)
 
 
 async function start(){
-   const response = await fetch(`http://localhost:3030/data/recipes?select=_id%2Cname%2Cimg `)
-   const data = await response.json()
+    const accessToken = sessionStorage.getItem('accessToken');
+    updateLinks(accessToken);
+
+    let options = {
+        method: 'get',
+        headers: {}
+    }
+    
+    if(accessToken){
+        options.headers['X-Authorization'] = accessToken
+    }
+
+    const response = await fetch(`http://localhost:3030/data/recipes?select=_id%2Cname%2Cimg`, options);
+
+    if(!response.ok && response.status == 403){
+        sessionStorage.removeItem(accessToken);
+        window.location = '/register.html'
+    }
+
+
+    const data = await response.json()
     showRecipes(data)
 }
 
@@ -30,7 +50,17 @@ function createPreview(recipe){
             </div>
     ` ;  
     result.addEventListener('click', async () => {
-        const response = await fetch(`http://localhost:3030/data/recipes/${recipe._id}`);
+            const accessToken = sessionStorage.getItem('accessToken');
+    let options = {
+        method: 'get',
+        headers: {}
+    }
+    
+    if(accessToken){
+        options.headers['X-Authorization'] = accessToken
+    }
+
+        const response = await fetch(`http://localhost:3030/data/recipes/${recipe._id}`, options);
         const data = await response.json();
         console.log(data);
         
@@ -55,3 +85,21 @@ function createPreview(recipe){
     return result;
 }
 
+function updateLinks(hasUser){
+    if(hasUser){
+        document.getElementById('user').style.display = 'inline-block'
+    }else {
+        document.getElementById('guest').style.display = 'inline-block'
+    }
+}
+
+function onLogOut(){
+     
+        fetch('http://localhost:3030/users/logout',{
+            method: 'get',
+            headers: {'X-Authorization': sessionStorage.getItem('accessToken')}
+        })
+    
+
+    window.location = '/login.html'
+}
