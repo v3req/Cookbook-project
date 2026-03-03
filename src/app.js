@@ -2,7 +2,7 @@ start()
 
 
 async function start(){
-   const response = await fetch(`http://localhost:3030/jsonstore/cookbook/recipes`)
+   const response = await fetch(`http://localhost:3030/data/recipes?select=_id%2Cname%2Cimg `)
    const data = await response.json()
     showRecipes(data)
 }
@@ -30,7 +30,7 @@ function createPreview(recipe){
             </div>
     ` ;  
     result.addEventListener('click', async () => {
-        const response = await fetch(`http://localhost:3030/jsonstore/cookbook/details/${recipe._id}`);
+        const response = await fetch(`http://localhost:3030/data/recipes/${recipe._id}`);
         const data = await response.json();
         console.log(data);
         
