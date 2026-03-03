@@ -1,6 +1,8 @@
 document.querySelector('form').addEventListener('submit', onRegister);
 
 async function onRegister(ev){
+    ev.preventDefault()
+
     const form = ev.target;
     const formData = new FormData(form);
 
@@ -23,7 +25,7 @@ async function onRegister(ev){
     }
 
     try{
-        const res = await fetch(`http://localhost:3030/users/register `, {
+        const res = await fetch(`http://localhost:3030/users/register`, {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(user)
@@ -39,7 +41,8 @@ async function onRegister(ev){
         
         const accessToken = data.accessToken;
 
-        sessionStorage.setItem('accessToken', accessToken)
+        sessionStorage.setItem('accessToken', accessToken);
+        window.location = '/'
     } catch(err){
         alert(err.message)
     }
