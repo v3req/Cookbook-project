@@ -42,7 +42,7 @@ async function onRegister(ev){
         const accessToken = data.accessToken;
 
         sessionStorage.setItem('accessToken', accessToken);
-        window.location = '/'
+        
     } catch(err){
         alert(err.message)
     }
