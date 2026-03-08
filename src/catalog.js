@@ -19,16 +19,22 @@ async function getRecipes(){
 
 
 
-const section = document.getElementById('catalog');
+ const section = document.getElementById('catalog');
 section.remove();
-const fragment = document.createDocumentFragment();
+ const fragment = document.createDocumentFragment();
 
 function createPreview(recipe){
-    const result = e('article', { className: 'preview', onClick: () => showDetails(recipe, recipe._id)  },
-            e('div', { className: 'title' }, e('h2', {}, recipe.name)),
-            e('div', { className: 'small' }, e('img', { src: recipe.img })),
-        );
-    
+    const result = document.createElement('article');
+    result.className = 'preview';
+    result.innerHTML = `
+            <div class="title">
+                <h2>${recipe.name}</h2>
+            </div>
+            <div class="small">
+                <img src=${recipe.img}>
+            </div>
+        `
+    result.addEventListener('click', (ev) => showDetails(ev, recipe._id));
     fragment.appendChild(result);
 }
 
