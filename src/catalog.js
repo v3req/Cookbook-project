@@ -1,11 +1,26 @@
-import { showView } from "./app.js";
-import { e } from './dom.js';
+import { showView, } from "./app.js";
+
 import { showDetails } from "./details.js";
+
 async function getRecipes(){
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    let options = {
+        method: 'get',
+        headers: {}
+    }
+
+    if(accessToken) {
+        options.headers['X-Authorization'] = accessToken
+    }
+
     try {
-        const res = await fetch('http://localhost:3030/data/recipes?select=_id%2Cname%2Cimg');
+        const res = await fetch('http://localhost:3030/data/recipes?select=_id%2Cname%2Cimg', options);
         
-        if(!res.ok){
+        if(!res.ok && res.status == 403){
+            sessionStorage.removeItem('accessToken')
+            showCatalog()
+        } else if(!res.ok){
             const err = await res.json();
             throw err
         }
@@ -42,5 +57,5 @@ export async function showCatalog(){
     await getRecipes()
     section.replaceChildren(fragment)
     showView(section)
-
+    
 }
