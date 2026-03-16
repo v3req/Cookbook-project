@@ -1,4 +1,4 @@
-import { showView, } from "./app.js";
+import { showView, } from "./app-demo.js";
 
 import { showDetails } from "./details.js";
 

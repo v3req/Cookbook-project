@@ -1,4 +1,4 @@
-import { showView } from "./app.js";
+import { showView } from "./app-demo.js";
 import { showCatalog } from "./catalog.js";
 
 const section = document.getElementById('create');

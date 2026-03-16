@@ -1,6 +1,6 @@
 import { showEdit } from "./edit.js";
 import { showCatalog } from "./catalog.js";
-import { setActiveNav } from "./app.js";
+import { setActiveNav } from "./app-demo.js";
 
 export async function showDetails(ev, id){
     const article = ev.currentTarget

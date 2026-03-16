@@ -1,4 +1,4 @@
-import { showView,setNavigationBar } from "./app.js";
+import { showView,setNavigationBar } from "./app-demo.js";
 import { showCatalog } from "./catalog.js";
 
 const section = document.getElementById('register');

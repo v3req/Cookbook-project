@@ -1,74 +1,45 @@
-import { showCatalog } from "./catalog.js";
-import { showCreate } from "./create.js";
-import { showLogin } from "./login.js";
-import { showRegister } from "./register.js";
-import { showEdit } from "./edit.js";
-import { showDetails } from "./details.js";
+import { catalogTemplate } from "src/views/catalogView.js";
+import { createTemplate } from "src/views/createView.js";
+import { loginTemplate } from "src/views/loginView.js";
+import { registerTemplate } from "src/views/registerView.js";
+import { editTemplate } from "src/views/editView.js";
+import { detailsTemplate } from "src/views/detailsView.js";
 
-const main = document.querySelector('main');
-const nav = document.querySelector('nav');
-nav.addEventListener('click', onNav);
-setNavigationBar()
+import { renderToMain } from "./utils/renderHelper";
 
-export function showView (section){
-    main.replaceChildren(section);
-    
-    
+
+function showCatalog(){
+    renderToMain(catalogTemplate())
 }
 
-const links = {
-        'catalogLink': showCatalog,
-        'createLink': showCreate,
-        'loginLink': showLogin,
-        'registerLink': showRegister,
-        'logoutBtn': logout,
+function showCreate(){
+    renderToMain(createTemplate())
 }
 
-    showCatalog();
-    setActiveNav('catalogLink');
-
-function onNav(ev){
-        if(ev.target.tagName == 'A'){
-            setActiveNav(ev.target.id);
-            const handler = links[ev.target.id];
-            if(handler){
-            ev.preventDefault();
-            handler()
-        }
-    }
+function showLogin(){
+    renderToMain(loginTemplate())
 }
 
- function logout() {
-        const response =  fetch('http://localhost:3030/users/logout', {
-            method: 'get',
-            headers: {
-                'X-Authorization': sessionStorage.getItem('accessToken')
-            },
-        });
-        
-            sessionStorage.removeItem('accessToken');
-            sessionStorage.removeItem('userId')
-            setNavigationBar();
-            setActiveNav('catalogLink');
-            showCatalog();
-            
-        
-        
-    }
-
-export function setNavigationBar(){
-    
-        if (sessionStorage.getItem('accessToken') != null) {
-            document.getElementById('user').style.display = 'inline-block';
-            document.getElementById('guest').style.display = 'none';
-        } else {
-            
-            document.getElementById('guest').style.display = 'inline-block';
-            document.getElementById('user').style.display = 'none'
-        
-    }
+function showRegister(){
+    renderToMain(registerTemplate())
 }
 
-export function setActiveNav(targetId) {
-        [...nav.querySelectorAll('a')].forEach(a => a.id == targetId ? a.classList.add('active') : a.classList.remove('active'));
-    }
+function showEdit(ctx){
+    renderToMain(editTemplate())
+}
+
+function showDetails(ctx){
+    renderToMain(detailsTemplate())
+}
+
+
+
+
+page('/', showCatalog);
+page('/create', showCreate);
+page('/login', showLogin);
+page('/reguster', showRegister);
+page('/:id/edit', showEdit);
+page('/:id', showCatalog)
+
+page()

@@ -1,4 +1,4 @@
-import { showView, setActiveNav } from "./app.js";
+import { showView, setActiveNav } from "./app-demo.js";
 import { showCatalog } from "./catalog.js";
 
 const section = document.getElementById('edit');
