@@ -1,6 +1,6 @@
 import { dataRequests } from "./api.js";
 import { passAndRepass, allFieldsCheck } from "./conditions.js";
-import { setNavigationBar } from "./nav.js";
+ import { setNavigationBar } from "./nav.js";
 
 function getFormData(form) {
     const formData = new FormData(form);
@@ -8,10 +8,10 @@ function getFormData(form) {
     return data;
 };
 
-export async function handleSubmit(e, location, headers){
+export async function handleSubmit(e, location, headers, method){
     e.preventDefault();
     const data = getFormData(e.target);
-    console.log(allFieldsCheck(data));
+    
     
     if(!allFieldsCheck(data)){
         alert('All fields are required!');
@@ -26,7 +26,7 @@ export async function handleSubmit(e, location, headers){
     }
 
     const response = await dataRequests(`http://localhost:3030/${location}`, {
-        method: 'post',
+        method,
         headers,
         body: JSON.stringify(data)
 })   
@@ -35,7 +35,10 @@ export async function handleSubmit(e, location, headers){
          sessionStorage.setItem('userId', response._id);
     };
     
-    document.getElementById('catalogLink').classList.add('active')
+    document.getElementById('catalogLink').classList.add('active');
+    const links = Array.from(document.querySelectorAll('a'));
+    links.forEach(a => a.classList.remove('active'));
+    document.getElementById('catalogLink').classList.add('active');
     setNavigationBar()
     page.redirect('/')
 }

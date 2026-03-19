@@ -25,8 +25,8 @@ export function detailsTemplate (recipe, userId){
             </div>
             ${userId === recipe._ownerId ? html `
                 <div class="controls">
-                    <button @click=${page.redirect(`/${recipe._id}/edit`)}>\u270E Edit</button>
-                    <button @click=${page.redirect(`/${recipe._id}/delete`)}>\u2716 Delete</button>
+                    <button @click=${() => page.redirect(`/${recipe._id}/edit`)}>\u270E Edit</button>
+                    <button @click=${() => page.redirect(`/${recipe._id}/delete`)}>\u2716 Delete</button>
                 </div>
                 ` : ''}
     </article>
