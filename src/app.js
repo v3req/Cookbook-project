@@ -16,11 +16,18 @@ import { handleSubmit } from "./utils/formHelper.js";
 
 setNavigationBar()
 
-const accessToken = sessionStorage.getItem('accessToken')
-const userId = sessionStorage.getItem('userId')
+function getAccessToken() {
+    return sessionStorage.getItem('accessToken');
+}
+
+function getUserId() {
+    return sessionStorage.getItem('userId');
+}
 
 async function showCatalog(){
     const recipes = await getAllRecipes();
+    console.log(recipes);
+    
     setNavigationBar();
 
     renderToMain(catalogTemplate(recipes));
@@ -29,7 +36,7 @@ async function showCatalog(){
 
 function showCreate(){
     renderToMain(createTemplate());
-    attachEventListener('form', 'submit', (e) => handleSubmit(e, 'data/recipes', {'Content-Type': 'application/json', 'X-Authorization': accessToken}, 'post'));
+    attachEventListener('form', 'submit', (e) => handleSubmit(e, 'data/recipes', {'Content-Type': 'application/json', 'X-Authorization': getAccessToken()}, 'post'));
     
 }
 
@@ -47,12 +54,12 @@ function showRegister(){
 
 function showEdit(ctx){
     renderToMain(editTemplate());
-     attachEventListener('form', 'submit', (e) => handleSubmit(e, `data/recipes/${ctx.params.id}`, {'Content-Type': 'application/json', 'X-Authorization': accessToken}, 'put'));
+     attachEventListener('form', 'submit', (e) => handleSubmit(e, `data/recipes/${ctx.params.id}`, {'Content-Type': 'application/json', 'X-Authorization': getAccessToken()}, 'put'));
 }
 
 async function showDetails(ctx){
     const recipe = await getRecipeById(ctx.params.id);
-    renderToMain(detailsTemplate(recipe, userId))
+    renderToMain(detailsTemplate(recipe, getUserId()))
 }
 
 function showDelete(ctx){
@@ -63,17 +70,17 @@ function showDelete(ctx){
 
     dataRequests(`http://localhost:3030/data/recipes/${ctx.params.id}`, {
         method: 'delete',
-        headers:{'Content-Type': 'application/json', 'X-Authorization': accessToken}
+        headers:{'Content-Type': 'application/json', 'X-Authorization': getAccessToken()}
     });
 
     document.querySelector('article').replaceChildren(`<h2>Recipe deleted.</h2>`);
-    setTimeout(page.redirect('/'), 2000)
+    setTimeout(() => page.redirect('/'), 2000);
 }
-function logout(){
-    const response =  fetch('http://localhost:3030/users/logout', {
+async function logout(){
+        await fetch('http://localhost:3030/users/logout', {
                 method: 'get',
                 headers: {
-                    'X-Authorization': accessToken
+                    'X-Authorization': getAccessToken()
                 },
             });
             

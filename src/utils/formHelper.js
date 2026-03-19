@@ -35,7 +35,7 @@ export async function handleSubmit(e, location, headers, method){
          sessionStorage.setItem('userId', response._id);
     };
     
-    document.getElementById('catalogLink').classList.add('active');
+    
     const links = Array.from(document.querySelectorAll('a'));
     links.forEach(a => a.classList.remove('active'));
     document.getElementById('catalogLink').classList.add('active');
