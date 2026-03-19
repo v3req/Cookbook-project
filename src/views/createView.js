@@ -1,4 +1,4 @@
-import { html } from 'src/utils/litHtml.js';
+import { html } from '../utils/litHtml.js';
 
 export function createTemplate(){
     return html `

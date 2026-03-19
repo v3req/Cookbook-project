@@ -1,9 +1,12 @@
-import { html } from 'src/utils/litHtml.js';
+import { html } from '../utils/litHtml.js';
 
 
 
-export function detailsView (recipe, userId){
+export function detailsTemplate (recipe, userId){
+    
+    
     return html `
+    <article>
     <h2>${recipe.name}</h2>
             <div class="band">
                 <div class="thumb">
@@ -12,20 +15,21 @@ export function detailsView (recipe, userId){
                 <div class="ingredients">
                     <h3>Ingredients:</h3>
                     <ul>
-                        ${recipe.ingredients.map(i => `<li>${i}</li>`).join('\n')}
+                        ${typeof recipe.ingredients === 'string' ? recipe.ingredients.split('\n').map(i => html `<li>${i}</li>`) : recipe.ingredients.map(i => html `<li>${i}</li>`)}
                     </ul>
                 </div>
             </div>
-            <div class="description">
+             <div class="description">
                 <h3>Preparation:</h3>
-                ${recipe.steps.map(s => `<p>${s}</p>`).join('\n')}
+                ${typeof recipe.steps === 'string' ? recipe.steps.split('\n').map(s => html `<p>${s}</p>`) : recipe.steps.map(s => html `<p>${s}</p>`)}
             </div>
             ${userId === recipe._ownerId ? html `
                 <div class="controls">
-                    <button @click=${page.redirect('/:id/edit')}>'\u270E Edit'</button>
-                    <button @click=${page.redirect('/:id/delete')}>'\u2716 Delete'</button>
+                    <button @click=${page.redirect(`/${recipe._id}/edit`)}>\u270E Edit</button>
+                    <button @click=${page.redirect(`/${recipe._id}/delete`)}>\u2716 Delete</button>
                 </div>
                 ` : ''}
+    </article>
         `
     
 }

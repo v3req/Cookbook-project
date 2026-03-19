@@ -1,4 +1,4 @@
-import { render } from 'src/utils/litHtml.js';
+import { render } from './litHtml.js';
 
 let mainElement = null;
 
