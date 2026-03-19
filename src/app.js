@@ -26,7 +26,7 @@ function getUserId() {
 
 async function showCatalog(){
     const recipes = await getAllRecipes();
-    console.log(recipes);
+    
     
     setNavigationBar();
 
@@ -73,37 +73,43 @@ function showDelete(ctx){
         headers:{'Content-Type': 'application/json', 'X-Authorization': getAccessToken()}
     });
 
-    document.querySelector('article').replaceChildren(`<h2>Recipe deleted.</h2>`);
+    document.querySelector('article').innerHTML = `<h2>Recipe deleted.</h2>`
     setTimeout(() => page.redirect('/'), 2000);
 }
-async function logout(){
-        await fetch('http://localhost:3030/users/logout', {
-                method: 'get',
-                headers: {
-                    'X-Authorization': getAccessToken()
-                },
-            });
-            
-                sessionStorage.removeItem('accessToken');
-                sessionStorage.removeItem('userId')
-                setNavigationBar();
-                
-                showCatalog();
-                
-            
-            
-        
+
+export async function logout() {
+    try {
+        const response = await fetch('http://localhost:3030/users/logout', {
+            method: 'get',
+            headers: {
+                'X-Authorization': sessionStorage.getItem('accessToken')
+            }
+        });
+
+        // We don't call .json() here because logout usually returns nothing (204)
+        if (response.ok || response.status === 401) {
+            sessionStorage.clear();
+            page.redirect('/');
+        } else {
+            const error = await response.json();
+            throw new Error(error.message);
+        }
+    } catch (err) {
+        // Even if the network fails, we usually want to clear the local session
+        sessionStorage.clear();
+        page.redirect('/');
+    }
 }
-
-
 
 
 page('/', showCatalog);
+page('/logout', logout);
 page('/create', showCreate);
 page('/login', showLogin);
 page('/register', showRegister);
 page('/:id/edit', showEdit);
 page('/:id/delete', showDelete);
-page('/:id', showDetails)
+page('/:id', showDetails);
+
 
 page()
