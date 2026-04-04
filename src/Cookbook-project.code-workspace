@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../../Desktop/cookbook/lesson-05/finished/tests"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Cookbook-project"
+	}
+}
